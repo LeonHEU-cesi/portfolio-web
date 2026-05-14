@@ -35,6 +35,7 @@ export const ui = {
 
     theme_toggle_label: 'Basculer le thème',
     lang_switch_label: 'Changer de langue',
+    menu_label: 'Menu',
 
     cta_download_cv: 'Télécharger mon CV',
     cta_see_project: 'Voir le projet',
@@ -94,6 +95,7 @@ export const ui = {
 
     theme_toggle_label: 'Toggle theme',
     lang_switch_label: 'Switch language',
+    menu_label: 'Menu',
 
     cta_download_cv: 'Download my résumé',
     cta_see_project: 'See project',

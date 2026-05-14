@@ -16,11 +16,13 @@ const summary = lang === 'fr' ? project.data.summary_fr : project.data.summary_e
 const href = p('projects', project.id);
 ---
 
-<article class="group rounded border border-border bg-surface p-6 transition-all hover:-translate-y-0.5 hover:border-text">
+<article class="group rounded-md border border-border bg-surface p-6 transition-[transform,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-text">
   <a href={href} class="block">
-    <h3 class="text-lg font-semibold tracking-tight text-text">{title}</h3>
+    <h3 class="text-lg font-semibold tracking-tight text-text transition-colors duration-200 ease-out group-hover:text-text">
+      {title}
+    </h3>
     <p class="mt-2 text-sm text-muted">{summary}</p>
-    <p class="mt-4 font-mono text-xs text-muted">
+    <p class="mt-6 font-mono text-xs uppercase tracking-widest text-muted">
       {project.data.tech.join(' · ')}
     </p>
   </a>

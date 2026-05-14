@@ -18,15 +18,13 @@ const posts = (
   {lang}
   alternateLangUrl="/en/blog"
 >
-  <section class="mx-auto max-w-4xl px-6 py-16">
-    <header>
-      <p class="font-mono text-xs uppercase tracking-widest text-accent">/{t('nav_blog').toLowerCase()}</p>
-      <h1 class="mt-4 text-balance text-4xl font-bold tracking-tight text-text sm:text-5xl">
-        {t('blog_title')}
-      </h1>
-      <p class="mt-4 max-w-2xl text-lg text-muted">{t('blog_description')}</p>
+  <section class="mx-auto max-w-4xl px-6 py-20 sm:py-28">
+    <header class="max-w-3xl">
+      <p class="font-mono text-xs uppercase tracking-[0.18em] text-accent">/{t('nav_blog').toLowerCase()}</p>
+      <h1 class="text-display-sm mt-6 text-balance text-text">{t('blog_title')}</h1>
+      <p class="mt-6 text-lg text-muted sm:text-xl">{t('blog_description')}</p>
     </header>
-    <div class="mt-12 grid gap-4 sm:grid-cols-2">
+    <div class="mt-16 grid gap-4 sm:grid-cols-2">
       {posts.map((post) => <PostCard {post} {lang} />)}
     </div>
   </section>

@@ -4,6 +4,7 @@ import type { Lang } from '~/i18n/ui';
 import SEO from '~/components/SEO.astro';
 import Header from '~/components/Header.astro';
 import Footer from '~/components/Footer.astro';
+import { ClientRouter } from 'astro:transitions';
 
 interface Props {
   title: string;
@@ -33,6 +34,7 @@ const { title, description, lang, alternateLangUrl } = Astro.props;
     </script>
 
     <SEO {title} {description} {lang} {alternateLangUrl} />
+    <ClientRouter />
   </head>
   <body class="min-h-screen bg-bg font-sans text-text antialiased">
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:rounded focus:border focus:border-text focus:bg-bg focus:px-3 focus:py-2 focus:text-sm focus:text-text">
@@ -43,5 +45,53 @@ const { title, description, lang, alternateLangUrl } = Astro.props;
       <slot />
     </main>
     <Footer {lang} />
+
+    <script>
+      function syncHtmlLang() {
+        const path = window.location.pathname;
+        document.documentElement.lang = path.startsWith('/en/') || path === '/en' ? 'en' : 'fr';
+      }
+
+      function closeMobileMenu() {
+        const btn = document.getElementById('mobile-menu-toggle');
+        const menu = document.getElementById('mobile-menu');
+        if (!btn || !menu) return;
+        btn.setAttribute('aria-expanded', 'false');
+        menu.setAttribute('hidden', '');
+      }
+
+      function toggleMobileMenu() {
+        const btn = document.getElementById('mobile-menu-toggle');
+        const menu = document.getElementById('mobile-menu');
+        if (!btn || !menu) return;
+        const isOpen = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!isOpen));
+        menu.toggleAttribute('hidden', isOpen);
+      }
+
+      document.addEventListener('click', (e) => {
+        const target = e.target;
+        if (!(target instanceof Element)) return;
+        if (target.closest('#theme-toggle')) {
+          const root = document.documentElement;
+          const goingDark = !root.classList.contains('dark');
+          root.classList.toggle('dark', goingDark);
+          root.classList.toggle('light', !goingDark);
+          localStorage.setItem('theme', goingDark ? 'dark' : 'light');
+          return;
+        }
+        if (target.closest('#mobile-menu-toggle')) {
+          toggleMobileMenu();
+          return;
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeMobileMenu();
+      });
+
+      document.addEventListener('astro:before-preparation', closeMobileMenu);
+      document.addEventListener('astro:after-swap', syncHtmlLang);
+    </script>
   </body>
 </html>

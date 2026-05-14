@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -21,6 +23,36 @@
   --color-muted: #A3A3A3;
   --color-border: #262626;
   --color-accent: #FF6B2C;
+}
+
+html {
+  font-feature-settings: "cv11";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #FFFFFF;
+}
+
+.text-display {
+  font-size: clamp(2.5rem, 5.5vw, 5rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+
+.text-display-sm {
+  font-size: clamp(2rem, 5.5vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
 }
 
 .prose-md {
@@ -49,6 +81,10 @@
   color: var(--color-accent);
   text-decoration: underline;
   text-underline-offset: 2px;
+  transition: opacity 200ms ease-out;
+}
+.prose-md a:hover {
+  opacity: 0.7;
 }
 .prose-md code {
   font-family: var(--font-mono);
@@ -88,4 +124,9 @@
   border-left: 3px solid var(--color-border);
   padding-left: 1rem;
   color: var(--color-muted);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
 }

@@ -21,15 +21,13 @@ const projects = (await getCollection('projects')).sort(
   {lang}
   alternateLangUrl="/en/projects"
 >
-  <section class="mx-auto max-w-6xl px-6 py-16">
-    <header>
-      <p class="font-mono text-xs uppercase tracking-widest text-accent">/{t('nav_projects').toLowerCase()}</p>
-      <h1 class="mt-4 text-balance text-4xl font-bold tracking-tight text-text sm:text-5xl">
-        {t('projects_title')}
-      </h1>
-      <p class="mt-4 max-w-2xl text-lg text-muted">{t('projects_description')}</p>
+  <section class="mx-auto max-w-6xl px-6 py-20 sm:py-28">
+    <header class="max-w-3xl">
+      <p class="font-mono text-xs uppercase tracking-[0.18em] text-accent">/{t('nav_projects').toLowerCase()}</p>
+      <h1 class="text-display-sm mt-6 text-balance text-text">{t('projects_title')}</h1>
+      <p class="mt-6 text-lg text-muted sm:text-xl">{t('projects_description')}</p>
     </header>
-    <div class="mt-12 grid gap-4 sm:grid-cols-2">
+    <div class="mt-16 grid gap-4 sm:grid-cols-2">
       {projects.map((project) => <ProjectCard {project} {lang} />)}
     </div>
   </section>

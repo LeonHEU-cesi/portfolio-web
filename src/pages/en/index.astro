@@ -5,7 +5,7 @@ import Hero from '~/components/Hero.astro';
 import ProjectCard from '~/components/ProjectCard.astro';
 import { useTranslations, useTranslatedPath } from '~/i18n/utils';
 
-const lang = 'fr';
+const lang = 'en';
 const t = useTranslations(lang);
 const p = useTranslatedPath(lang);
 
@@ -19,7 +19,7 @@ const featured = projects
   title={t('home_title')}
   description={t('home_description')}
   {lang}
-  alternateLangUrl="/en/"
+  alternateLangUrl="/"
 >
   <Hero {lang} />
 

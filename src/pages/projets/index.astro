@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import ProjectCard from '~/components/ProjectCard.astro';
+import { useTranslations } from '~/i18n/utils';
+
+const lang = 'fr';
+const t = useTranslations(lang);
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) =>
+    Number(b.data.featured) - Number(a.data.featured) ||
+    a.data.order - b.data.order ||
+    b.data.date.getTime() - a.data.date.getTime(),
+);
+---
+
+<BaseLayout
+  title={`${t('projects_title')} — Léon Heu`}
+  description={t('projects_description')}
+  {lang}
+  alternateLangUrl="/en/projects"
+>
+  <section class="mx-auto max-w-6xl px-6 py-16">
+    <header>
+      <p class="font-mono text-xs uppercase tracking-widest text-accent">/{t('nav_projects').toLowerCase()}</p>
+      <h1 class="mt-4 text-balance text-4xl font-bold tracking-tight text-text sm:text-5xl">
+        {t('projects_title')}
+      </h1>
+      <p class="mt-4 max-w-2xl text-lg text-muted">{t('projects_description')}</p>
+    </header>
+    <div class="mt-12 grid gap-4 sm:grid-cols-2">
+      {projects.map((project) => <ProjectCard {project} {lang} />)}
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,53 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import SkillGroup from '~/components/SkillGroup.astro';
+import { useTranslations } from '~/i18n/utils';
+import { skillGroups } from '~/data/skills';
+import { experiences } from '~/data/experiences';
+
+const lang = 'en';
+const t = useTranslations(lang);
+
+const dateFormatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short' });
+function fmt(iso: string | null) {
+  if (!iso) return t('today');
+  const [y, m] = iso.split('-').map(Number);
+  return dateFormatter.format(new Date(y, m - 1, 1));
+}
+---
+
+<BaseLayout
+  title={`${t('about_title')} — Léon Heu`}
+  description={t('about_description')}
+  {lang}
+  alternateLangUrl="/a-propos"
+>
+  <section class="mx-auto max-w-4xl px-6 py-16">
+    <p class="font-mono text-xs uppercase tracking-widest text-accent">/{t('nav_about').toLowerCase()}</p>
+    <h1 class="mt-4 text-balance text-4xl font-bold tracking-tight text-text sm:text-5xl">
+      {t('about_intro_title')}
+    </h1>
+    <p class="mt-6 max-w-2xl text-lg text-muted">{t('about_intro_body')}</p>
+
+    <section class="mt-16">
+      <h2 class="text-2xl font-bold tracking-tight text-text">{t('about_experience_title')}</h2>
+      <ol class="mt-6 space-y-6">
+        {experiences.map((exp) => (
+          <li class="rounded border border-border bg-surface p-6">
+            <p class="font-mono text-xs uppercase tracking-widest text-muted">{fmt(exp.startDate)} → {fmt(exp.endDate)}</p>
+            <h3 class="mt-2 text-lg font-semibold text-text">{exp.title_en}</h3>
+            <p class="mt-1 text-sm text-muted">{exp.org}</p>
+            <p class="mt-3 text-sm text-text">{exp.summary_en}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="mt-16">
+      <h2 class="text-2xl font-bold tracking-tight text-text">{t('about_skills_title')}</h2>
+      <div class="mt-6 grid gap-8 sm:grid-cols-2">
+        {skillGroups.map((group) => <SkillGroup {group} {lang} />)}
+      </div>
+    </section>
+  </section>
+</BaseLayout>

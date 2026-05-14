@@ -1,0 +1,27 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { useTranslatedPath } from '~/i18n/utils';
+import type { Lang } from '~/i18n/ui';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  lang: Lang;
+}
+
+const { project, lang } = Astro.props;
+const p = useTranslatedPath(lang);
+
+const title = lang === 'fr' ? project.data.title_fr : project.data.title_en;
+const summary = lang === 'fr' ? project.data.summary_fr : project.data.summary_en;
+const href = p('projects', project.id);
+---
+
+<article class="group rounded border border-border bg-surface p-6 transition-all hover:-translate-y-0.5 hover:border-text">
+  <a href={href} class="block">
+    <h3 class="text-lg font-semibold tracking-tight text-text">{title}</h3>
+    <p class="mt-2 text-sm text-muted">{summary}</p>
+    <p class="mt-4 font-mono text-xs text-muted">
+      {project.data.tech.join(' · ')}
+    </p>
+  </a>
+</article>

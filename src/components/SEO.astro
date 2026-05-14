@@ -1,0 +1,38 @@
+---
+import { site } from '~/data/site';
+import type { Lang } from '~/i18n/ui';
+
+interface Props {
+  title: string;
+  description: string;
+  lang: Lang;
+  alternateLangUrl?: string;
+  ogImage?: string;
+}
+
+const { title, description, lang, alternateLangUrl, ogImage = '/og/og-default.jpg' } = Astro.props;
+const canonical = new URL(Astro.url.pathname, site.url).toString();
+const ogImageUrl = new URL(ogImage, site.url).toString();
+const otherLang: Lang = lang === 'fr' ? 'en' : 'fr';
+const alternateUrl = alternateLangUrl ? new URL(alternateLangUrl, site.url).toString() : null;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonical} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:locale" content={lang === 'fr' ? 'fr_FR' : 'en_US'} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageUrl} />
+
+<link rel="alternate" hreflang={lang} href={canonical} />
+{alternateUrl && <link rel="alternate" hreflang={otherLang} href={alternateUrl} />}
+{alternateUrl && <link rel="alternate" hreflang="x-default" href={lang === 'fr' ? canonical : alternateUrl} />}

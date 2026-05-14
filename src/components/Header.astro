@@ -1,0 +1,45 @@
+---
+import { useTranslations, useTranslatedPath } from '~/i18n/utils';
+import { site } from '~/data/site';
+import type { Lang } from '~/i18n/ui';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  lang: Lang;
+  alternateLangUrl?: string;
+}
+
+const { lang, alternateLangUrl } = Astro.props;
+const t = useTranslations(lang);
+const p = useTranslatedPath(lang);
+
+const navItems = [
+  { href: p('home'), label: t('nav_home') },
+  { href: p('about'), label: t('nav_about') },
+  { href: p('projects'), label: t('nav_projects') },
+  { href: p('blog'), label: t('nav_blog') },
+  { href: p('contact'), label: t('nav_contact') },
+];
+
+const brand = site.name.toLowerCase().replace(/\s+/g, '.');
+---
+
+<header class="sticky top-0 z-10 border-b border-border bg-bg/80 backdrop-blur">
+  <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-6">
+    <a href={p('home')} class="font-mono text-sm font-semibold tracking-tight text-text">
+      {brand}
+    </a>
+    <nav aria-label="Primary" class="hidden items-center gap-6 sm:flex">
+      {navItems.map((item) => (
+        <a href={item.href} class="text-sm text-muted transition-colors hover:text-text">
+          {item.label}
+        </a>
+      ))}
+    </nav>
+    <div class="flex items-center gap-2">
+      <LanguageSwitcher {lang} alternateUrl={alternateLangUrl} />
+      <ThemeToggle {lang} />
+    </div>
+  </div>
+</header>

@@ -1,0 +1,59 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { useTranslations, useTranslatedPath } from '~/i18n/utils';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const lang = 'fr';
+const t = useTranslations(lang);
+const p = useTranslatedPath(lang);
+
+const title = project.data.title_fr;
+const summary = project.data.summary_fr;
+const { Content } = await render(project);
+---
+
+<BaseLayout
+  title={`${title} — Léon Heu`}
+  description={summary}
+  {lang}
+  alternateLangUrl={`/en/projects/${project.id}`}
+>
+  <article class="mx-auto max-w-3xl px-6 py-16">
+    <a href={p('projects')} class="font-mono text-xs uppercase tracking-widest text-muted transition-colors hover:text-text">
+      ← {t('cta_all_projects')}
+    </a>
+    <header class="mt-8">
+      <h1 class="text-balance text-4xl font-bold tracking-tight text-text sm:text-5xl">{title}</h1>
+      <p class="mt-4 text-lg text-muted">{summary}</p>
+      <p class="mt-6 font-mono text-xs text-muted">{project.data.tech.join(' · ')}</p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        {project.data.demo && (
+          <a href={project.data.demo} rel="noopener" class="inline-flex h-10 items-center rounded border border-text bg-text px-5 text-sm font-medium text-bg transition-opacity hover:opacity-80">
+            {t('cta_live_demo')} →
+          </a>
+        )}
+        {project.data.repo && (
+          <a href={project.data.repo} rel="noopener" class="inline-flex h-10 items-center rounded border border-border px-5 text-sm font-medium text-text transition-colors hover:border-text">
+            {t('cta_see_code')}
+          </a>
+        )}
+      </div>
+    </header>
+    <div class="prose-md mt-12">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

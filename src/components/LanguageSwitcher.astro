@@ -1,0 +1,23 @@
+---
+import { useTranslations } from '~/i18n/utils';
+import type { Lang } from '~/i18n/ui';
+
+interface Props {
+  lang: Lang;
+  alternateUrl?: string;
+}
+
+const { lang, alternateUrl } = Astro.props;
+const t = useTranslations(lang);
+const otherLang: Lang = lang === 'fr' ? 'en' : 'fr';
+const href = alternateUrl ?? (lang === 'fr' ? '/en/' : '/');
+---
+
+<a
+  href={href}
+  hreflang={otherLang}
+  aria-label={t('lang_switch_label')}
+  class="inline-flex h-9 items-center justify-center rounded border border-border px-3 font-mono text-xs uppercase text-muted transition-colors hover:text-text hover:border-text"
+>
+  {otherLang}
+</a>

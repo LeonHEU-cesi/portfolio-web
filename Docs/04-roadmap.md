@@ -8,7 +8,7 @@
 | 2 | Arborescence | Validée (2026-05-14) |
 | 3 | Directions visuelles | Validée (2026-05-14) — direction **A « Editorial Bold »** retenue, cf. [05-direction-visuelle.md](./05-direction-visuelle.md) |
 | 4 | Initialiser Astro 5 + Tailwind 4 | Fait (2026-05-14) |
-| 5 | Structure de base navigable (placeholders) | À venir — validation requise |
+| 5 | Structure de base navigable (placeholders) | À valider (2026-05-14) |
 | 6 | Design final | À venir |
 | 7 | SEO + performance | À venir |
 | 8 | Documentation + déploiement | À venir |

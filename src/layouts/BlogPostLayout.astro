@@ -1,0 +1,45 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import { useTranslations, useTranslatedPath } from '~/i18n/utils';
+import type { Lang } from '~/i18n/ui';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  lang: Lang;
+  alternateLangUrl?: string;
+}
+
+const { post, lang, alternateLangUrl } = Astro.props;
+const t = useTranslations(lang);
+const p = useTranslatedPath(lang);
+
+const dateFormatter = new Intl.DateTimeFormat(lang === 'fr' ? 'fr-FR' : 'en-US', {
+  year: 'numeric', month: 'long', day: 'numeric',
+});
+---
+
+<BaseLayout
+  title={`${post.data.title} — Léon Heu`}
+  description={post.data.description}
+  {lang}
+  {alternateLangUrl}
+>
+  <article class="mx-auto max-w-3xl px-6 py-16">
+    <a href={p('blog')} class="font-mono text-xs uppercase tracking-widest text-muted transition-colors hover:text-text">
+      ← {t('blog_back_to_list')}
+    </a>
+    <header class="mt-8">
+      <time datetime={post.data.pubDate.toISOString()} class="font-mono text-xs text-muted">
+        {t('blog_published_on')} {dateFormatter.format(post.data.pubDate)}
+      </time>
+      <h1 class="mt-4 text-balance text-4xl font-bold tracking-tight text-text sm:text-5xl">
+        {post.data.title}
+      </h1>
+      <p class="mt-4 text-lg text-muted">{post.data.description}</p>
+    </header>
+    <div class="prose-md mt-12">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>

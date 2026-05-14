@@ -1,0 +1,37 @@
+---
+import { useTranslations, useTranslatedPath } from '~/i18n/utils';
+import type { Lang } from '~/i18n/ui';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const p = useTranslatedPath(lang);
+---
+
+<section class="px-6 pb-24 pt-16 sm:pb-32 sm:pt-24">
+  <div class="mx-auto max-w-4xl">
+    <p class="font-mono text-xs uppercase tracking-widest text-accent">
+      {t('home_hero_eyebrow')}
+    </p>
+    <h1 class="mt-6 text-balance text-4xl font-bold tracking-tight text-text sm:text-5xl md:text-6xl">
+      {t('home_hero_title')}
+    </h1>
+    <p class="mt-6 max-w-2xl text-balance text-lg text-muted">
+      {t('home_hero_subtitle')}
+    </p>
+    <div class="mt-10 flex flex-wrap gap-3">
+      <a
+        href={p('projects')}
+        class="inline-flex h-11 items-center rounded border border-text bg-text px-6 text-sm font-medium text-bg transition-opacity hover:opacity-80"
+      >
+        {t('cta_all_projects')}
+      </a>
+      <a
+        href={p('contact')}
+        class="inline-flex h-11 items-center rounded border border-border px-6 text-sm font-medium text-text transition-colors hover:border-text"
+      >
+        {t('cta_contact')}
+      </a>
+    </div>
+  </div>
+</section>

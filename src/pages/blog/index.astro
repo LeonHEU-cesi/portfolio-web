@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import PostCard from '~/components/PostCard.astro';
+import { useTranslations } from '~/i18n/utils';
+
+const lang = 'fr';
+const t = useTranslations(lang);
+
+const posts = (
+  await getCollection('blog', ({ data }) => data.lang === 'fr' && !data.draft)
+).sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+---
+
+<BaseLayout
+  title={`${t('blog_title')} — Léon Heu`}
+  description={t('blog_description')}
+  {lang}
+  alternateLangUrl="/en/blog"
+>
+  <section class="mx-auto max-w-4xl px-6 py-16">
+    <header>
+      <p class="font-mono text-xs uppercase tracking-widest text-accent">/{t('nav_blog').toLowerCase()}</p>
+      <h1 class="mt-4 text-balance text-4xl font-bold tracking-tight text-text sm:text-5xl">
+        {t('blog_title')}
+      </h1>
+      <p class="mt-4 max-w-2xl text-lg text-muted">{t('blog_description')}</p>
+    </header>
+    <div class="mt-12 grid gap-4 sm:grid-cols-2">
+      {posts.map((post) => <PostCard {post} {lang} />)}
+    </div>
+  </section>
+</BaseLayout>

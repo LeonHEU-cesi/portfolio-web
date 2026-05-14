@@ -1,0 +1,47 @@
+---
+import '~/styles/global.css';
+import type { Lang } from '~/i18n/ui';
+import SEO from '~/components/SEO.astro';
+import Header from '~/components/Header.astro';
+import Footer from '~/components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  lang: Lang;
+  alternateLangUrl?: string;
+}
+
+const { title, description, lang, alternateLangUrl } = Astro.props;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <script is:inline>
+      (function () {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const isDark = saved ? saved === 'dark' : prefersDark;
+        document.documentElement.classList.add(isDark ? 'dark' : 'light');
+      })();
+    </script>
+
+    <SEO {title} {description} {lang} {alternateLangUrl} />
+  </head>
+  <body class="min-h-screen bg-bg font-sans text-text antialiased">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:rounded focus:border focus:border-text focus:bg-bg focus:px-3 focus:py-2 focus:text-sm focus:text-text">
+      Skip to content
+    </a>
+    <Header {lang} {alternateLangUrl} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer {lang} />
+  </body>
+</html>

@@ -10,29 +10,52 @@ interface Props {
   ogImage?: string;
 }
 
-const { title, description, lang, alternateLangUrl, ogImage = '/og/og-default.jpg' } = Astro.props;
+const { title, description, lang, alternateLangUrl, ogImage } = Astro.props;
 const canonical = new URL(Astro.url.pathname, site.url).toString();
-const ogImageUrl = new URL(ogImage, site.url).toString();
+const ogImageUrl = ogImage ? new URL(ogImage, site.url).toString() : null;
 const otherLang: Lang = lang === 'fr' ? 'en' : 'fr';
 const alternateUrl = alternateLangUrl ? new URL(alternateLangUrl, site.url).toString() : null;
+
+const isHomePage = Astro.url.pathname === '/' || Astro.url.pathname === '/en/' || Astro.url.pathname === '/en';
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  url: site.url,
+  email: site.email,
+  jobTitle: lang === 'fr' ? 'Développeur web' : 'Web developer',
+  sameAs: [site.social.github, site.social.linkedin],
+};
 ---
 
 <title>{title}</title>
 <meta name="description" content={description} />
+<meta name="author" content={site.name} />
 <link rel="canonical" href={canonical} />
+
+<meta name="theme-color" content="#FAFAFA" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0A0A0A" media="(prefers-color-scheme: dark)" />
 
 <meta property="og:type" content="website" />
 <meta property="og:url" content={canonical} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={ogImageUrl} />
+<meta property="og:site_name" content={site.name} />
 <meta property="og:locale" content={lang === 'fr' ? 'fr_FR' : 'en_US'} />
+{ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
 
-<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:card" content={ogImageUrl ? 'summary_large_image' : 'summary'} />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={ogImageUrl} />
+{ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
 
 <link rel="alternate" hreflang={lang} href={canonical} />
 {alternateUrl && <link rel="alternate" hreflang={otherLang} href={alternateUrl} />}
 {alternateUrl && <link rel="alternate" hreflang="x-default" href={lang === 'fr' ? canonical : alternateUrl} />}
+
+<link rel="alternate" type="application/rss+xml" title={`${site.name} — Blog`} href={lang === 'fr' ? '/rss-fr.xml' : '/rss-en.xml'} />
+
+{isHomePage && (
+  <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+)}

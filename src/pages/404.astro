@@ -2,21 +2,36 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import { useTranslations } from '~/i18n/utils';
 
-const lang = 'fr';
-const t = useTranslations(lang);
+const tFr = useTranslations('fr');
+const tEn = useTranslations('en');
 ---
 
-<BaseLayout title={`404 — ${t('not_found_title')}`} description={t('not_found_title')} {lang}>
+<BaseLayout title={`404 — ${tFr('not_found_title')}`} description={tFr('not_found_title')} lang="fr">
   <section class="mx-auto max-w-3xl px-6 py-32 text-center">
     <p class="font-mono text-xs uppercase tracking-[0.18em] text-accent">/404</p>
     <h1 class="text-display-sm mt-6 text-balance text-text">
-      {t('not_found_title')}
+      <span data-i18n-fr>{tFr('not_found_title')}</span>
+      <span data-i18n-en hidden>{tEn('not_found_title')}</span>
     </h1>
     <a
+      id="back-home"
       href="/"
       class="mt-12 inline-flex h-11 items-center rounded border border-text bg-text px-5 text-sm font-medium text-bg transition-opacity duration-200 ease-out hover:opacity-90"
     >
-      ← {t('not_found_back_home')}
+      ←&nbsp;<span data-i18n-fr>{tFr('not_found_back_home')}</span><span data-i18n-en hidden>{tEn('not_found_back_home')}</span>
     </a>
   </section>
+
+  <script is:inline>
+    (function () {
+      if (location.pathname.startsWith('/en')) {
+        document.documentElement.lang = 'en';
+        document.title = '404 — Page not found';
+        document.querySelectorAll('[data-i18n-fr]').forEach((el) => el.setAttribute('hidden', ''));
+        document.querySelectorAll('[data-i18n-en]').forEach((el) => el.removeAttribute('hidden'));
+        const back = document.getElementById('back-home');
+        if (back) back.setAttribute('href', '/en/');
+      }
+    })();
+  </script>
 </BaseLayout>

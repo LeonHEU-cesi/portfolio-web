@@ -1,5 +1,7 @@
 ---
 import '~/styles/global.css';
+import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import jetbrainsMonoLatin from '@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url';
 import type { Lang } from '~/i18n/ui';
 import SEO from '~/components/SEO.astro';
 import Header from '~/components/Header.astro';
@@ -23,6 +25,9 @@ const { title, description, lang, alternateLangUrl } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+
+    <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href={jetbrainsMonoLatin} as="font" type="font/woff2" crossorigin="anonymous" />
 
     <script is:inline>
       (function () {

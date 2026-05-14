@@ -52,6 +52,35 @@ const { title, description, lang, alternateLangUrl } = Astro.props;
     <Footer {lang} />
 
     <script>
+      function isExternalLink(href: string): boolean {
+        if (!/^https?:\/\//i.test(href)) return false;
+        try {
+          return new URL(href).hostname !== window.location.hostname;
+        } catch {
+          return false;
+        }
+      }
+
+      function markExternalLinks() {
+        document.querySelectorAll<HTMLAnchorElement>('a[href]').forEach((a) => {
+          const href = a.getAttribute('href');
+          if (!href || !isExternalLink(href)) return;
+          if (!a.hasAttribute('target')) a.setAttribute('target', '_blank');
+          const rel = new Set((a.getAttribute('rel') || '').split(/\s+/).filter(Boolean));
+          rel.add('noopener');
+          rel.add('noreferrer');
+          a.setAttribute('rel', Array.from(rel).join(' '));
+        });
+      }
+
+      function applyTheme(root: HTMLElement) {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const isDark = saved ? saved === 'dark' : prefersDark;
+        root.classList.remove('dark', 'light');
+        root.classList.add(isDark ? 'dark' : 'light');
+      }
+
       function syncHtmlLang() {
         const path = window.location.pathname;
         document.documentElement.lang = path.startsWith('/en/') || path === '/en' ? 'en' : 'fr';
@@ -74,6 +103,21 @@ const { title, description, lang, alternateLangUrl } = Astro.props;
         menu.toggleAttribute('hidden', isOpen);
       }
 
+      function onPageLoad() {
+        markExternalLinks();
+        syncHtmlLang();
+      }
+
+      onPageLoad();
+      document.addEventListener('astro:page-load', onPageLoad);
+
+      document.addEventListener('astro:before-swap', (event) => {
+        const e = event as unknown as { newDocument: Document };
+        applyTheme(e.newDocument.documentElement);
+      });
+
+      document.addEventListener('astro:before-preparation', closeMobileMenu);
+
       document.addEventListener('click', (e) => {
         const target = e.target;
         if (!(target instanceof Element)) return;
@@ -94,9 +138,6 @@ const { title, description, lang, alternateLangUrl } = Astro.props;
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeMobileMenu();
       });
-
-      document.addEventListener('astro:before-preparation', closeMobileMenu);
-      document.addEventListener('astro:after-swap', syncHtmlLang);
     </script>
   </body>
 </html>

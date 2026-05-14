@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+/* Direction visuelle : Editorial Bold
+   cf. Docs/05-direction-visuelle.md */
+
+@theme {
+  /* Couleurs — mode clair (par défaut) */
+  --color-bg: #FAFAFA;
+  --color-surface: #FFFFFF;
+  --color-text: #0A0A0A;
+  --color-muted: #525252;
+  --color-border: #E5E5E5;
+  --color-accent: #FF4F00;
+
+  /* Typographie */
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "JetBrains Mono", "Cascadia Code", "Source Code Pro", Menlo, monospace;
+}
+
+/* Mode sombre — toggle utilisateur (classe .dark sur :root) */
+:root.dark {
+  --color-bg: #0A0A0A;
+  --color-surface: #171717;
+  --color-text: #FAFAFA;
+  --color-muted: #A3A3A3;
+  --color-border: #262626;
+  --color-accent: #FF6B2C;
+}
+
+/* Mode sombre — détection système si pas de choix explicite (.light absent) */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --color-bg: #0A0A0A;
+    --color-surface: #171717;
+    --color-text: #FAFAFA;
+    --color-muted: #A3A3A3;
+    --color-border: #262626;
+    --color-accent: #FF6B2C;
+  }
+}

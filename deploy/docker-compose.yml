@@ -1,0 +1,18 @@
+# Compose pour exécuter le portfolio en local ou sur un host Docker.
+# Usage : `docker compose -f deploy/docker-compose.yml up -d` depuis la racine.
+
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    image: leonheu-fr:latest
+    container_name: leonheu-fr
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3

@@ -1,0 +1,38 @@
+# Caddy config — leonheu.fr
+# Usage : copier dans /etc/caddy/Caddyfile sur le LXC, puis `caddy reload`.
+
+leonheu.fr {
+    root * /var/www/leonheu.fr
+    file_server
+    encode gzip zstd
+
+    # 404 stylée
+    handle_errors {
+        @404 expression {http.error.status_code} == 404
+        rewrite @404 /404.html
+        file_server
+    }
+
+    # Cache long pour les assets hashés
+    @static path /_astro/* *.woff2 *.css *.js
+    header @static Cache-Control "public, max-age=31536000, immutable"
+
+    # Headers de sécurité
+    header {
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "interest-cohort=()"
+        # À décommenter une fois HTTPS confirmé stable :
+        # Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+    }
+
+    log {
+        output file /var/log/caddy/leonheu.fr.log
+        format console
+    }
+}
+
+# Redirection www → apex
+www.leonheu.fr {
+    redir https://leonheu.fr{uri} permanent
+}

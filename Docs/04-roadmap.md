@@ -11,7 +11,7 @@
 | 5 | Structure de base navigable (placeholders) | Validée (2026-05-14) |
 | 6 | Design final | Validée (2026-05-14) |
 | 7 | SEO + performance | Fait (2026-05-14) |
-| 8 | Documentation + déploiement | À venir |
+| 8 | Documentation + déploiement | Fait (2026-05-14) — voir [`/deploy/README.md`](../deploy/README.md) |
 
 ## Étape 3 — Directions visuelles
 
